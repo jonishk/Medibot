@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Medical AI Assistant</title>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <!-- jQuery -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<!-- Custom CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="wrapper">
+    <div class="title">
+      <i class="fas fa-user-md"></i>
+      Medical AI Assistant
+      <div class="status-indicator"></div>
+    </div>
+
+    <div id="messageFormeight" class="box"></div>
+
+    <div class="typing-area">
+      <form id="messageArea" class="input-field">
+        <input type="text" id="text" name="msg" placeholder="Describe your symptoms or ask a question..." required autocomplete="off">
+        <button type="submit">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+  $(document).ready(function() {
+    $("#messageArea").on("submit", function(event) {
+      event.preventDefault();
+
+      const date = new Date();
+      const hour = date.getHours();
+      const minute = (date.getMinutes()<10?'0':'') + date.getMinutes();
+      const str_time = hour + ":" + minute;
+
+      var rawText = $("#text").val();
+      if (!rawText.trim()) return;
+
+      // User message with enhanced styling
+      var userHtml = `
+        <div class="item right">
+          <div class="msg">
+            <p>${rawText}</p>
+            <span class="time">${str_time}</span>
+          </div>
+          <div class="user-avatar">
+            <i class="fas fa-user"></i>
+          </div>
+        </div>`;
+      
+      $("#text").val("");
+      $("#messageFormeight").append(userHtml);
+      
+      // Show typing indicator
+      var typingHtml = `
+        <div class="item typing" id="typing">
+          <div class="icon"><i class="fas fa-user-md"></i></div>
+          <div class="msg">
+            <div class="typing-indicator">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+        </div>`;
+      $("#messageFormeight").append(typingHtml);
+      $("#messageFormeight").scrollTop($("#messageFormeight")[0].scrollHeight);
+
+      // Send to Flask backend
+      $.ajax({
+        data: { msg: rawText },
+        type: "POST",
+        url: "/get",
+      }).done(function(data) {
+        // Remove typing indicator
+        $("#typing").remove();
+        
+        // Add bot response with enhanced styling
+        var botHtml = `
+          <div class="item">
+            <div class="icon"><i class="fas fa-user-md"></i></div>
+            <div class="msg">
+              <p>${data}</p>
+              <span class="time">${str_time}</span>
+            </div>
+          </div>`;
+        $("#messageFormeight").append(botHtml);
+        $("#messageFormeight").scrollTop($("#messageFormeight")[0].scrollHeight);
+      }).fail(function() {
+        // Remove typing indicator on error
+        $("#typing").remove();
+        
+        var errorHtml = `
+          <div class="item">
+            <div class="icon"><i class="fas fa-exclamation-triangle"></i></div>
+            <div class="msg">
+              <p>Sorry, I'm having trouble connecting right now. Please try again.</p>
+              <span class="time">${str_time}</span>
+            </div>
+          </div>`;
+        $("#messageFormeight").append(errorHtml);
+        $("#messageFormeight").scrollTop($("#messageFormeight")[0].scrollHeight);
+      });
+    });
+  });
+  </script>
+</body>
+</html>
