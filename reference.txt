@@ -1,0 +1,12 @@
+Reference:
+
+for chatbot UI design 
+https://github.com/Ishaq101/Simple-AI-Chatbot
+
+Guha, M. (2007). The Gale Encyclopedia of Medicine (3rd edition)2007183Edited by Jacqueline L. Longe. The Gale Encyclopedia of Medicine (3rd edition). Detroit: Thomson Gale 2006. 5 vols., ISBN: 978 1 4144 0369 4 $625 Also available as an e‐book (ISBN 978 1 4144 0485 1). Reference Reviews, 21(4), 27–29. https://doi.org/10.1108/09504120710744556
+
+‌Dr Julija. (2024, March 10). How I built a Basic RAG for PDF QA in a few lines of python code. Medium. https://medium.com/@drjulija/how-i-built-a-basic-rag-for-pdf-qa-in-a-few-lines-of-python-code-9849c32e59f0
+
+McGough, B. (2024, July 18). Building an Accurate, Tested RAG Pipeline for PDF Document Search with LangChain. Medium. https://medium.com/@bpmcgough/building-an-accurate-tested-rag-pipeline-for-pdf-document-search-with-langchain-01032abbe5e1
+
+‌
